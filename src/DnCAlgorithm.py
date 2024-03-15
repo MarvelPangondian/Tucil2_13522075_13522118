@@ -53,7 +53,7 @@ class BezierDnC:
         self.ax.set_xlabel('X')
         self.ax.set_ylabel('Y')
         self.ax.set_title('Animating Quadratic Bézier Curve')
-        self.ax.plot([point[0] for point in self.control_points], [point[1] for point in self.control_points], marker='o', markersize=4, linestyle='-', color='red', label='Control Points')
+        self.ax.plot([point[0] for point in self.control_points], [point[1] for point in self.control_points], marker='o', markersize=4, linestyle='--', color='#8594e4', label='Control Points')
 
     def update_text_annotations(self, points):
         # Remove old annotations
@@ -67,8 +67,9 @@ class BezierDnC:
 
     def animate(self):
         self.init_plot()
-        intermediate_plots, = self.ax.plot([], [], 'bo', markersize=3)  # Intermediate points
-        curve_plot, = self.ax.plot([], [], 'b-', markersize=4)  # Bézier curve
+        curve_plot, = self.ax.plot([], [], '#6643b5', markersize=4,linestyle='-',label = 'Bezier Curve')  # Bézier curve
+        intermediate_plots, = self.ax.plot([], [], marker='o', color='#6643b5', linestyle='None', markersize=3)   # Intermediate points
+
         intermediate_points_accumulated = []
 
         def init():
@@ -100,9 +101,9 @@ class BezierDnC:
 
     def showGraph(self):
         plt.figure(figsize=(10, 6))
-        plt.plot(*zip(*(self.curve_points)), label='Quadratic Bézier Curve', marker='o', markersize=4, linestyle='-', color='#8dc6ff')
-        plt.plot(*zip(*control_points), marker='o', markersize=4, linestyle='--', color='#34495e', label='Control Points')
-        plt.scatter(*zip(*control_points), color='#22313f', zorder=5)
+        plt.plot(*zip(*(self.curve_points)), label='Quadratic Bézier Curve', marker='o', markersize=4, linestyle='-', color='#6643b5')
+        plt.plot(*zip(*control_points), marker='o', markersize=4, linestyle='--', color='#8594e4', label='Control Points')
+        plt.scatter(*zip(*control_points), color='#8594e4', zorder=5)
         for i, point in enumerate(control_points):
             formatted_point = f"C{i}: ({point[0]:.2f}, {point[1]:.2f})"
             plt.text(point[0], point[1], formatted_point, fontsize=9, verticalalignment='bottom', horizontalalignment='right')
@@ -135,7 +136,7 @@ class BezierDnC:
         plt.tight_layout()
         plt.show()
 control_points = np.array( [(-2,-3),(-3,-2),(0,-2), (1,-3),(2,1)], dtype=float)
-depth = 1
+depth = 3
 animation = BezierDnC(control_points, depth)
 
 animation.animate()
