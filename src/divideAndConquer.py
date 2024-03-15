@@ -6,7 +6,6 @@ def divide_and_conquer_bezier(points, depth, curve_points=None):
     if curve_points is None:
         curve_points = []
     if depth == 0:
-        # Use numpy to calculate and append points without unpacking
         curve_points.extend([points[0],points[-1]])
         return curve_points
     
