@@ -16,7 +16,6 @@ class BezierDnC:
         self.curve_points_array = np.array(self.curve_points)
         self.fig, self.ax = None,None
         self.texts = []  
-        
 
     def divide_and_conquer_bezier(self, points, depth, curve_points=[], intermediates=[]):
         if depth == 0:
@@ -42,12 +41,10 @@ class BezierDnC:
         all.extend(start_needed)
         all.extend(final_piece)
         all.extend(last_needed)
-        print(all)
-        
         self.divide_and_conquer_bezier(np.array(all[0 : (len(all)//2) + 1]), depth - 1, curve_points,intermediates)
         self.divide_and_conquer_bezier(np.array(all[(len(all) // 2) : ]), depth - 1, curve_points,intermediates)
         return curve_points, intermediates
-
+    
     def init_plot(self):
         self.fig, self.ax = plt.subplots(figsize=(10, 6))
         self.ax.set_xlabel('X')
@@ -60,7 +57,7 @@ class BezierDnC:
         for text in self.texts:
             text.remove()
         self.texts.clear()
-
+        
         # Add new annotations for all points
         for point in points:
             self.texts.append(self.ax.text(point[0], point[1], f'({point[0]:.2f}, {point[1]:.2f})', fontsize=6))
@@ -69,14 +66,13 @@ class BezierDnC:
         self.init_plot()
         curve_plot, = self.ax.plot([], [], '#6643b5', markersize=4,linestyle='-',label = 'Bezier Curve')  # Bézier curve
         intermediate_plots, = self.ax.plot([], [], marker='o', color='#6643b5', linestyle='None', markersize=3)   # Intermediate points
-
         intermediate_points_accumulated = []
 
         def init():
             intermediate_plots.set_data([], [])
             curve_plot.set_data([], [])
-            return intermediate_plots, curve_plot,
-
+            return intermediate_plots, curve_plot
+        
         def update(frame):
             nonlocal intermediate_points_accumulated
             if frame < len(self.intermediates):
@@ -92,9 +88,10 @@ class BezierDnC:
                 if frame == total_frames - 1:  # Update annotations for the last frame
                     self.update_text_annotations(self.curve_points_array[:curve_frame+1])
             return intermediate_plots, curve_plot,
-
+    
         total_frames = len(self.intermediates) + len(self.curve_points)
         animation = FuncAnimation(self.fig, update, frames=total_frames, init_func=init, blit=False, interval=1500, repeat=False)
+        plt.text(0.5, 0.01, f'Execution Time: {self.execution_time:.2f} ms', fontsize=10, transform=plt.gcf().transFigure, horizontalalignment='center')
         plt.legend()
         plt.tight_layout()
         plt.show()
@@ -107,14 +104,14 @@ class BezierDnC:
         for i, point in enumerate(control_points):
             formatted_point = f"C{i}: ({point[0]:.2f}, {point[1]:.2f})"
             plt.text(point[0], point[1], formatted_point, fontsize=9, verticalalignment='bottom', horizontalalignment='right')
-
+        
         annotation_interval = len(self.curve_points) // 10 or 1# avoid showing too many points
 
         for i, point in enumerate(self.curve_points):
             if (i % annotation_interval == 0 and point not in control_points):
                 formatted_point = f"({point[0]:.2f}, {point[1]:.2f})"
                 plt.text(point[0], point[1], formatted_point, fontsize=6, verticalalignment='top')
-
+        
         all_points = np.concatenate([self.curve_points, control_points])
         x_coords = all_points[:, 0]
         y_coords = all_points[:, 1]
@@ -136,8 +133,8 @@ class BezierDnC:
         plt.tight_layout()
         plt.show()
 control_points = np.array( [(-2,-3),(-3,-2),(0,-2), (1,-3),(2,1)], dtype=float)
-depth = 3
+depth = 2
 animation = BezierDnC(control_points, depth)
 
-animation.animate()
-# animation.showGraph()
+animation.animate() # to show animation
+# animation.showGraph() # to show graph
