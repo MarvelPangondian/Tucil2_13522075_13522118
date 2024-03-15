@@ -24,38 +24,45 @@ def divide_and_conquer_bezier(points, depth, curve_points=None):
         else :
             start_needed.append(temp[0])
             last_needed.insert(0,temp[-1])
-    
     all = []
     all.extend(start_needed)
     all.extend(final_piece)
     all.extend(last_needed)
- 
 
     divide_and_conquer_bezier(np.array(all[0 : (len(all)//2) + 1]), depth - 1, curve_points)
     divide_and_conquer_bezier(np.array(all[(len(all) // 2) : ]), depth - 1, curve_points)
     return curve_points
 
 # Convert control points to a numpy array
-control_points = np.array( [(1, 2), (2, 4), (4, 3), (5, 5),(7,2)], dtype=float)
-# Ensure control points are sorted
-control_points = control_points[np.argsort(control_points[:, 0])]
+control_points = np.array( [(-2,-3),(-3,-2),(0,-2),(1,-3),(2,1)], dtype=float)
 
-
-depth = 2
+depth = 1
 curve_points = divide_and_conquer_bezier(control_points, depth, [])
-curve_points = np.unique(curve_points, axis=0)  # Remove duplicates
+curve_points_array = np.array(curve_points)
+_, unique_indices = np.unique(curve_points_array, axis=0, return_index=True)
+
+curve_points_unique = curve_points_array[sorted(unique_indices)]
 
 plt.figure(figsize=(10, 6))
-plt.plot(curve_points[:,0], curve_points[:,1], label='Quadratic Bézier Curve', marker='o', markersize=4, linestyle='-', color='blue')
-plt.plot(control_points[:,0], control_points[:,1], marker='o', markersize=4, linestyle='-', color='red')
-plt.scatter(control_points[:,0], control_points[:,1], color='red', zorder=5, label='Control Points')
-
+plt.plot(*zip(*curve_points_unique), label='Quadratic Bézier Curve', marker='o', markersize=4, linestyle='-', color='blue')
+plt.plot(*zip(*control_points), marker='o', markersize=4, linestyle='-', color='red')
+plt.scatter(*zip(*control_points), color='red', zorder=5, label='Control Points')
 for i, point in enumerate(control_points):
-    plt.text(point[0], point[1], f"C{i}: ({point[0]}, {point[1]})", fontsize=9, verticalalignment='bottom', horizontalalignment='right')
+    plt.text(point[0], point[1], f"C{i}: {point}", fontsize=9, verticalalignment='bottom', horizontalalignment='right')
+
+
+annotation_interval = len(curve_points) // 10 or 1 
+
+for i, point in enumerate(curve_points):
+    if i % annotation_interval == 0:
+        plt.text(point[0], point[1], f"{point}", fontsize=6, verticalalignment='top')
 
 plt.legend()
 plt.xlabel('X')
 plt.ylabel('Y')
 plt.title('Quadratic Bézier Curve via Divide and Conquer with All Points')
+plt.grid(True) 
 plt.tight_layout()
 plt.show()
+
+
