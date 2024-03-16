@@ -77,5 +77,5 @@ def showGraphDnC(control_points,depth):
     plt.show()
 
 control_points = np.array( [(-2,-3),(-3,-2),(0,-2), (1,-3),(2,1)], dtype=float)
-depth = 3
+depth = 6
 showGraphDnC(control_points,depth)

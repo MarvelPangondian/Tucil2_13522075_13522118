@@ -97,7 +97,12 @@ class BezierDnC:
             return intermediate_plots, curve_plot,
     
         total_frames = len(self.intermediates) + len(self.curve_points)
-        animation = FuncAnimation(self.fig, update, frames=total_frames, init_func=init, blit=False, interval=1500, repeat=False)
+        interval = 1500
+        if (self.depth > 5 and self.depth < 10):
+            interval = 1000
+        elif (self.depth >= 10):
+            interval = 500
+        animation = FuncAnimation(self.fig, update, frames=total_frames, init_func=init, blit=False, interval=interval, repeat=False)
         plt.text(0.5, 0.01, f'Execution Time: {self.execution_time:.2f} ms', fontsize=10, transform=plt.gcf().transFigure, horizontalalignment='center')
         plt.legend()
         plt.grid(True) 
@@ -107,20 +112,20 @@ class BezierDnC:
     def showGraph(self):
         plt.figure(figsize=(10, 6))
         plt.plot(*zip(*(self.curve_points)), label='Bézier Curve', marker='o', markersize=4, linestyle='-', color='#6643b5')
-        plt.plot(*zip(*control_points), marker='o', markersize=4, linestyle='--', color='#8594e4', label='Control Points')
-        plt.scatter(*zip(*control_points), color='#8594e4', zorder=5)
-        for i, point in enumerate(control_points):
+        plt.plot(*zip(*(self.control_points)), marker='o', markersize=4, linestyle='--', color='#8594e4', label='Control Points')
+        plt.scatter(*zip(*(self.control_points)), color='#8594e4', zorder=5)
+        for i, point in enumerate(self.control_points):
             formatted_point = f"C{i}: ({point[0]:.2f}, {point[1]:.2f})"
             plt.text(point[0], point[1], formatted_point, fontsize=9, verticalalignment='bottom', horizontalalignment='right')
         
-        annotation_interval = len(self.curve_points) // 20 or 1# avoid showing too many points
+        # annotation_interval = len(self.curve_points) // 20 or 1# avoid showing too many points
         
         for i, point in enumerate(self.curve_points):
-            if (point not in control_points):
+            if (point not in self.control_points):
                 formatted_point = f"({point[0]:.2f}, {point[1]:.2f})"
                 plt.text(point[0], point[1], formatted_point, fontsize=6, verticalalignment='top')
         
-        all_points = np.concatenate([self.curve_points, control_points])
+        all_points = np.concatenate([self.curve_points, self.control_points])
         x_coords = all_points[:, 0]
         y_coords = all_points[:, 1]
         x_min, x_max = x_coords.min(), x_coords.max()
@@ -140,8 +145,8 @@ class BezierDnC:
         plt.grid(True) 
         plt.tight_layout()
         plt.show()
-control_points = np.array( [(-2,-3),(-3,-2),(0,-2), (1,-3),(2,1)], dtype=float)
-depth = 2
+control_points = np.array( [(1, 2), (2, 4), (4, 3), (5, 5),(-7,7)], dtype=float)
+depth = 3
 animation = BezierDnC(control_points, depth)
 
 animation.animate() # to show animation
