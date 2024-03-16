@@ -51,6 +51,10 @@ class BezierDnC:
         self.ax.set_ylabel('Y')
         self.ax.set_title('Animating Bézier Curve')
         self.ax.plot([point[0] for point in self.control_points], [point[1] for point in self.control_points], marker='o', markersize=4, linestyle='--', color='#8594e4', label='Control Points')
+        for i, point in enumerate(self.control_points):
+            formatted_point = f"C{i}: ({point[0]:.2f}, {point[1]:.2f})"
+            plt.text(point[0], point[1], formatted_point, fontsize=9, verticalalignment='bottom', horizontalalignment='right')
+        
 
     def update_text_annotations(self, points):
         # Remove old annotations
@@ -77,27 +81,26 @@ class BezierDnC:
             nonlocal intermediate_points_accumulated
             if frame == total_frames - 1:
                 intermediate_points_accumulated = []
-                intermediate_plots.set_data([], [])
+                intermediate_plots.set_data([point[0] for point in self.curve_points if point not in self.control_points], [point[1] for point in self.curve_points if point not in self.control_points])
                 curve_plot.set_data([point[0] for point in self.curve_points], [point[1] for point in self.curve_points])
-                self.update_text_annotations(self.curve_points)
+                points_last_frame = [points for points in self.curve_points if points not in self.control_points]
+                self.update_text_annotations(points_last_frame)
             elif frame < len(self.intermediates):
                 points = np.array(self.intermediates[frame]).reshape(-1, 2)
                 intermediate_points_accumulated.extend(points)
                 xs = [point[0] for point in intermediate_points_accumulated]
                 ys = [point[1] for point in intermediate_points_accumulated]
                 intermediate_plots.set_data(xs, ys)
-                # self.update_text_annotations(intermediate_points_accumulated)
             else:
                 curve_frame = frame - len(self.intermediates)
                 curve_plot.set_data([point[0] for point in self.curve_points_array[:curve_frame+1]], [point[1] for point in self.curve_points_array[:curve_frame+1]])
-                if frame == total_frames - 1:  # Update annotations for the last frame
-                    self.update_text_annotations(self.curve_points_array[:curve_frame+1])
             return intermediate_plots, curve_plot,
     
         total_frames = len(self.intermediates) + len(self.curve_points)
         animation = FuncAnimation(self.fig, update, frames=total_frames, init_func=init, blit=False, interval=1500, repeat=False)
         plt.text(0.5, 0.01, f'Execution Time: {self.execution_time:.2f} ms', fontsize=10, transform=plt.gcf().transFigure, horizontalalignment='center')
         plt.legend()
+        plt.grid(True) 
         plt.tight_layout()
         plt.show()
 
@@ -141,5 +144,5 @@ control_points = np.array( [(-2,-3),(-3,-2),(0,-2), (1,-3),(2,1)], dtype=float)
 depth = 2
 animation = BezierDnC(control_points, depth)
 
-# animation.animate() # to show animation
-animation.showGraph() # to show graph
+animation.animate() # to show animation
+# animation.showGraph() # to show graph
