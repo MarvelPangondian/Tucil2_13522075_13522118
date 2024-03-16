@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 import time
-
+from math import ceil as ceil
 class BezierDnC:
     def __init__(self, control_points, depth):
         self.control_points = control_points
@@ -11,11 +11,21 @@ class BezierDnC:
         self.curve_points, self.intermediates = self.divide_and_conquer_bezier(control_points, depth, [], [])
         self.execution_time = (time.time() - start_time)*1000
         self.curve_points_array = np.array(self.curve_points)
+        temp_start = self.curve_points_array[0]
+        temp_end = self.curve_points_array[-1]
+        self.curve_points_array = self.curve_points_array[1:-1]
         _, unique_indices = np.unique(self.curve_points_array, axis=0, return_index=True)
         self.curve_points = self.curve_points_array[sorted(unique_indices)]
+        if (temp_start.any() and temp_end.any()) :
+            self.curve_points = np.insert(self.curve_points,0,temp_start,axis=0)
+            self.curve_points = np.append(self.curve_points,[temp_end],axis=0)
         self.curve_points_array = np.array(self.curve_points)
         self.fig, self.ax = None,None
         self.texts = []  
+        self.interval_points = 1
+        if self.depth > 5 :
+            self.interval_points = ceil( ( (2**self.depth) + 1 ) / 33 )
+            pass
 
     def divide_and_conquer_bezier(self, points, depth, curve_points=[], intermediates=[]):
         if depth == 0:
@@ -83,7 +93,14 @@ class BezierDnC:
                 intermediate_points_accumulated = []
                 intermediate_plots.set_data([point[0] for point in self.curve_points if point not in self.control_points], [point[1] for point in self.curve_points if point not in self.control_points])
                 curve_plot.set_data([point[0] for point in self.curve_points], [point[1] for point in self.curve_points])
-                points_last_frame = [points for points in self.curve_points if points not in self.control_points]
+                count = 0
+                points_last_frame = []
+                for points in self.curve_points:
+                    if points not in self.control_points:
+                        count += 1
+                        if (count % self.interval_points == 0):
+                            points_last_frame.append(points)
+                
                 self.update_text_annotations(points_last_frame)
             elif frame < len(self.intermediates):
                 points = np.array(self.intermediates[frame]).reshape(-1, 2)
@@ -119,11 +136,13 @@ class BezierDnC:
             plt.text(point[0], point[1], formatted_point, fontsize=9, verticalalignment='bottom', horizontalalignment='right')
         
         # annotation_interval = len(self.curve_points) // 20 or 1# avoid showing too many points
-        
+        count = 0
         for i, point in enumerate(self.curve_points):
             if (point not in self.control_points):
-                formatted_point = f"({point[0]:.2f}, {point[1]:.2f})"
-                plt.text(point[0], point[1], formatted_point, fontsize=6, verticalalignment='top')
+                count += 1
+                if (count % self.interval_points == 0):
+                    formatted_point = f"({point[0]:.2f}, {point[1]:.2f})"
+                    plt.text(point[0], point[1], formatted_point, fontsize=6, verticalalignment='top')
         
         all_points = np.concatenate([self.curve_points, self.control_points])
         x_coords = all_points[:, 0]
@@ -145,9 +164,9 @@ class BezierDnC:
         plt.grid(True) 
         plt.tight_layout()
         plt.show()
-control_points = np.array( [(1, 2), (2, 4), (4, 3), (5, 5),(-7,7)], dtype=float)
-depth = 3
+control_points = np.array(  [(-2,-3),(-3,-2),(0,-2), (1,-3),(2,1)], dtype=float)
+depth = 20
 animation = BezierDnC(control_points, depth)
 
-animation.animate() # to show animation
-# animation.showGraph() # to show graph
+# animation.animate() # to show animation
+animation.showGraph() # to show graph
