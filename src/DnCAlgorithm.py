@@ -132,9 +132,9 @@ class BezierDnC:
         plt.grid(True) 
         plt.tight_layout()
         plt.show()
-control_points = np.array( [(-2,-3),(-3,-2),(0,-2), (1,-3),(2,1)], dtype=float)
-depth = 2
+control_points = np.array( [(-2,-3),(-3,-2),(0,-2), (1,-3),(2,1), (4,7)], dtype=float)
+depth = 20
 animation = BezierDnC(control_points, depth)
 
-animation.animate() # to show animation
-# animation.showGraph() # to show graph
+# animation.animate() # to show animation
+animation.showGraph() # to show graph
