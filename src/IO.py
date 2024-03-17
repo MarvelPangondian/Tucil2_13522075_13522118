@@ -37,7 +37,7 @@ def orde_iteration_input(choice : int) -> BezierDnC:
                 control_points[i][1] = float(input(f"Y-axis Control point number  {i + 1}: "))
             control_points = np.array(control_points)
 
-            depth = int(input("Masukkan jumlah iterasi: "))
+            depth = int(input("Input number of iterations: "))
             if (depth <0):
                 print("Invalid depth input !")
                 continue
