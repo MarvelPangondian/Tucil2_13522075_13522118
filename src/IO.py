@@ -13,17 +13,16 @@ def Mainmenu() -> BezierDnC:
             choice = int(input("Input : "))
             if (choice == 1 or choice == 2):
                 valid = True
-                return choice
             else:
                 print("Please choose a valid option !")
-
         except ValueError:
             print("Please input a valid integer !")
         print()
-    print("=============================================================================")
+    return choice
 
 def orde_iteration_input(choice : int) -> BezierDnC:
     valid = False
+    print("=============================================================================")
     while (not valid):
         try:
             order = int(input("input order : "))
@@ -42,6 +41,7 @@ def orde_iteration_input(choice : int) -> BezierDnC:
             if (depth <0):
                 print("Invalid depth input !")
                 continue
+            print()
             bezier = BezierDnC(control_points,depth,choice)
             return bezier
         
@@ -54,6 +54,8 @@ def orde_iteration_input(choice : int) -> BezierDnC:
         print()
 
 def show_output(result : BezierDnC , choice : int):
+    if (choice == 1):
+        print("=============================================================================")
     valid = False
     while (not valid):
         try:
@@ -70,7 +72,6 @@ def show_output(result : BezierDnC , choice : int):
                     result.animate()
                 else:
                     print("Please enter the correct choice !")
-                    continue
 
             elif (choice == 2):
                 result.showGraph()
@@ -83,12 +84,13 @@ def show_output(result : BezierDnC , choice : int):
 
 def save_fig(result : BezierDnC):
     valid = False
+    print("=============================================================================")
     while (not valid):
         save_option = input("Would you like to save the graph ? y(yes) / other key (no): ")
         if (save_option == "y"):
             save_path = "../test/"
             file_name = input("file name (with .png): ")
-            save_path_file = save_path + file_name
+            save_path_file = os.path.join(save_path, file_name)
             if (os.path.exists(save_path_file)):
                 print("File already exists !")
             else:
@@ -96,3 +98,4 @@ def save_fig(result : BezierDnC):
                 valid = True
         else:
             valid = True
+        print()
