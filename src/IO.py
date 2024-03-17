@@ -25,7 +25,7 @@ def orde_iteration_input(choice : int) -> BezierDnC:
     print("=============================================================================")
     while (not valid):
         try:
-            order = int(input("input order : "))
+            order = int(input("Bézier Curve order : "))
             if (order <= 0):
                 print("Please input a valid order !")
                 print()
@@ -33,8 +33,8 @@ def orde_iteration_input(choice : int) -> BezierDnC:
 
             control_points = [[0,0] for i in range(order + 1)]
             for i in range(order + 1): 
-                control_points[i][0] = float(input(f"Sumbu x Control point ke {i + 1}: "))
-                control_points[i][1] = float(input(f"Sumbu y Control point ke {i + 1}: "))
+                control_points[i][0] = float(input(f"X-axis Control point number  {i + 1}: "))
+                control_points[i][1] = float(input(f"Y-axis Control point number  {i + 1}: "))
             control_points = np.array(control_points)
 
             depth = int(input("Masukkan jumlah iterasi: "))

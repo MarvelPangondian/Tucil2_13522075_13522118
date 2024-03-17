@@ -95,7 +95,7 @@ class BezierDnC:
         if (self.depth > 5 and self.depth < 10):
             interval = 1000
         elif (self.depth >= 10):
-            interval = 500
+            interval = 50
         animation = FuncAnimation(self.fig, update, frames=total_frames, init_func=init, blit=False, interval=interval, repeat=False)
         plt.text(0.5, 0.01, f'Execution Time: {self.execution_time:.2f} ms', fontsize=10, transform=plt.gcf().transFigure, horizontalalignment='center')
         plt.legend()
@@ -111,8 +111,6 @@ class BezierDnC:
         for i, point in enumerate(self.control_points):
             formatted_point = f"C{i}: ({point[0]:.2f}, {point[1]:.2f})"
             plt.text(point[0], point[1], formatted_point, fontsize=9, verticalalignment='bottom', horizontalalignment='right')
-        
-        # annotation_interval = len(self.curve_points) // 20 or 1# avoid showing too many points
         count = 0
         for i, point in enumerate(self.curve_points):
             if (point not in self.control_points):
