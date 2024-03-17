@@ -19,21 +19,25 @@ class BezierCurve:
             self.curve_points, self.intermediates = divide_and_conquer_bezier(control_points, depth, [], [])
         else : 
             self.curve_points = brute_force_bezier(control_points, depth)
-
         self.execution_time = (time.time() - start_time)*1000
+
+        # Process the curve points into np array
         self.curve_points_array = np.array(self.curve_points)
         temp_start = self.curve_points_array[0] # avoid removing duplicate ends of control points
         temp_end = self.curve_points_array[-1]
-        self.curve_points_array = self.curve_points_array[1:-1]
+        self.curve_points_array = self.curve_points_array[1:-1] # delete the first and last element
         _, unique_indices = np.unique(self.curve_points_array, axis=0, return_index=True)
         self.curve_points = self.curve_points_array[sorted(unique_indices)]
-        if (temp_start.any() and temp_end.any()) :
+        # Reinsert the first last element 
+        if (temp_start is not None and temp_end is not None) :
             self.curve_points = np.insert(self.curve_points,0,temp_start,axis=0)
             self.curve_points = np.append(self.curve_points,[temp_end],axis=0)
         self.curve_points_array = np.array(self.curve_points)
         self.fig, self.ax = None,None
         self.texts = []  
         self.interval_points = 1
+
+        # Adjust for animation speed purpose 
         if self.depth > 5 :
             self.interval_points = ceil( ( (2**self.depth) + 1 ) / 33 )
             pass
