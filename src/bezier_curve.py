@@ -5,16 +5,21 @@ import time
 from brute_force_bezier import brute_force_bezier
 from dnc_bezier import divide_and_conquer_bezier
 from math import ceil as ceil
-class BezierDnC:
+
+# Bezier Curve Class
+class BezierCurve:
+    # initialize the attributes
     def __init__(self, control_points, depth, method):
         self.control_points = control_points
         self.depth = depth
         self.method = method
         start_time = time.time()
+        # create the curve based on the method chosen
         if method == 1 : 
             self.curve_points, self.intermediates = divide_and_conquer_bezier(control_points, depth, [], [])
         else : 
             self.curve_points = brute_force_bezier(control_points, depth)
+
         self.execution_time = (time.time() - start_time)*1000
         self.curve_points_array = np.array(self.curve_points)
         temp_start = self.curve_points_array[0] # avoid removing duplicate ends of control points
@@ -32,7 +37,8 @@ class BezierDnC:
         if self.depth > 5 :
             self.interval_points = ceil( ( (2**self.depth) + 1 ) / 33 )
             pass
-
+    
+    # initialize plot that will be used for the animation
     def init_plot(self):
         self.fig, self.ax = plt.subplots(figsize=(10, 6))
         self.ax.set_xlabel('X')
@@ -43,6 +49,7 @@ class BezierDnC:
             formatted_point = f"C{i}: ({point[0]:.2f}, {point[1]:.2f})"
             plt.text(point[0], point[1], formatted_point, fontsize=9, verticalalignment='bottom', horizontalalignment='right')      
     
+    # Update the plot text annotations
     def update_text_annotations(self, points):
         # Remove old annotations
         for text in self.texts:
@@ -53,6 +60,7 @@ class BezierDnC:
         for point in points:
             self.texts.append(self.ax.text(point[0], point[1], f'({point[0]:.2f}, {point[1]:.2f})', fontsize=6))
 
+    # animate the curve (this is only for bezier curve)
     def animate(self):
         self.init_plot()
         curve_plot, = self.ax.plot([], [], '#6643b5', markersize=4,linestyle='-',label = 'Bezier Curve')  # Bézier curve
@@ -103,6 +111,7 @@ class BezierDnC:
         plt.tight_layout()
         plt.show()
         
+    # Procedure to show the graph
     def showGraph(self):
         self.fig = plt.figure(figsize=(10, 6))
         plt.plot(*zip(*(self.curve_points)), label='Bézier Curve', marker='o', markersize=4, linestyle='-', color='#6643b5')
