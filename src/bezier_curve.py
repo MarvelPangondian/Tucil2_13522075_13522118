@@ -63,17 +63,6 @@ class BezierDnC:
             curve_plot.set_data([], [])
             return intermediate_plots, curve_plot
         
-    def animate(self):
-        self.init_plot()
-        curve_plot, = self.ax.plot([], [], '#6643b5', markersize=4,linestyle='-',label = 'Bezier Curve')  # Bézier curve
-        intermediate_plots, = self.ax.plot([], [], marker='o', color='#6643b5', linestyle='None', markersize=3)   # Intermediate points
-        intermediate_points_accumulated = []
-
-        def init():
-            intermediate_plots.set_data([], [])
-            curve_plot.set_data([], [])
-            return intermediate_plots, curve_plot
-        
         def update(frame):
             nonlocal intermediate_points_accumulated
             if frame == total_frames - 1:
@@ -114,7 +103,7 @@ class BezierDnC:
         plt.show()
         
     def showGraph(self):
-        plt.figure(figsize=(10, 6))
+        self.fig = plt.figure(figsize=(10, 6))
         plt.plot(*zip(*(self.curve_points)), label='Bézier Curve', marker='o', markersize=4, linestyle='-', color='#6643b5')
         plt.plot(*zip(*(self.control_points)), marker='o', markersize=4, linestyle='--', color='#8594e4', label='Control Points')
         plt.scatter(*zip(*(self.control_points)), color='#8594e4', zorder=5)
