@@ -20,8 +20,8 @@
 │       └─── Tucil2_13522075_13522118.pdf
 │
 ├─── src
-│       ├─── bezier_curve
-│       ├─── brute_force_bezier
+│       ├─── bezier_curve.py
+│       ├─── brute_force_bezier.py
 │       ├─── dnc_bezier.py
 │       ├─── IO.py
 │       └─── main.py
