@@ -2,7 +2,7 @@ import numpy as np
 from typing import List, Tuple
 
 # interpolation function
-def interpolate(point1 : float, point2 : float, t : float) -> Tuple[float,float] :
+def interpolate(point1 : Tuple[float], point2 : Tuple[float], t : float) -> Tuple[float,float] :
     return (1 - t) * np.array(point1) + t * np.array(point2)
 
 # function to get the curve points using brute force method
