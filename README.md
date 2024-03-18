@@ -124,7 +124,7 @@ File already exists !
 Would you like to save the graph ? y(yes) / other key (no): y
 file name (with .png): test.png 
 
-Apakah ingin lanjut?(y/n) y
+Do you wish to continue?(y/n) n
 ```
 Pengguna dapat lanjut membuat atau menghentikan program.
 
