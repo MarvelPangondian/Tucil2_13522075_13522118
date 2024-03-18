@@ -122,7 +122,7 @@ File already exists !
 Would you like to save the graph ? y(yes) / other key (no): y
 file name (with .png): test.png 
 
-Do you wish to continue?(y/n)
+Do you wish to continue?(y/n) n
 ```
 Pengguna dapat lanjut membuat kurva Bezier atau menghentikan program.
 
