@@ -141,10 +141,15 @@ class BezierCurve:
         # Adding some margin
         margin_x = (x_max - x_min) * 0.1 
         margin_y = (y_max - y_min) * 0.1
+        if margin_x <= 1:
+            margin_x = 1
+        if margin_y <= 1:
+            margin_y = 1
 
         graph_title = "Bézier Curve via Divide and Conquer"
         if (self.method == 2):
             graph_title = "Bézier Curve via Brute Force"
+
         plt.xlim(x_min - margin_x, x_max + margin_x)
         plt.ylim(y_min - margin_y, y_max + margin_y)
         plt.text(0.5, 0.01, f'Execution Time: {self.execution_time:.2f} ms', fontsize=10, transform=plt.gcf().transFigure, horizontalalignment='center')
