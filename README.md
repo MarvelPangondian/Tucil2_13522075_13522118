@@ -15,9 +15,6 @@
 <!-- * [License](#license) -->
 ## Sistematika File
 ```
-├─── bin
-│       ├─── 
-│
 ├─── doc
 │       ├─── Spesifikasi Tugas Kecil 2 Stima 2023_2024.pdf
 │       └─── Tucil2_13522075_13522118.pdf
@@ -33,6 +30,7 @@
 │       └─── All experiments and graph said experiments
 │
 ├─── .gitignore
+├─── LICENSE
 ├─── README.md
 └─── requirements.txt
 ```
@@ -124,9 +122,9 @@ File already exists !
 Would you like to save the graph ? y(yes) / other key (no): y
 file name (with .png): test.png 
 
-Apakah ingin lanjut?(y/n) y
+Do you wish to continue?(y/n)
 ```
-Pengguna dapat lanjut membuat atau menghentikan program.
+Pengguna dapat lanjut membuat kurva Bezier atau menghentikan program.
 
 
 ## Status Proyek
